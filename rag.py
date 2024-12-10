@@ -1,9 +1,8 @@
 
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings, ChatOllama
 
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.docstore.in_memory import InMemoryDocstore
 
 from langchain_core.documents import Document
@@ -16,32 +15,31 @@ from langgraph.checkpoint.memory import MemorySaver
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import faiss
-import bs4
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 
 
-CHAT_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-large")
-EMBEDDINGS_DIMENSION = os.getenv("EMBEDDINGS_DIMENSION", 3072)
+CHAT_MODEL = os.getenv("CHAT_MODEL", "llama3.2:3b")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "llama3.2:3b")
+EMBEDDINGS_DIMENSION = os.getenv("EMBEDDINGS_DIMENSION", 4096)
 
 NUMBER_OF_CHUNKS_TO_RETRIEVE = 2
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 150
 
-llm = ChatOpenAI(model=CHAT_MODEL)
+llm = ChatOllama(model=CHAT_MODEL)
 
 
 
-embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
 
 
 try:
     EMBEDDINGS_DIMENSION = int(EMBEDDINGS_DIMENSION)
 except ValueError:
-    EMBEDDINGS_DIMENSION = 3072
+    EMBEDDINGS_DIMENSION = 4096
 
 vector_store = FAISS(
         embedding_function=embeddings,

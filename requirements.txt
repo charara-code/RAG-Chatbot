@@ -1,6 +1,6 @@
 langchain-text-splitters 
 langchain-community
-langchain-openai
+langchain-ollama
 python-dotenv
 langgraph
 beautifulsoup4
